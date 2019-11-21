@@ -17,6 +17,4 @@ public interface CurrencyExchangeServiceProxy {
     //@GetMapping("/foreign-exchange/from/{from}/to/{to}")
     @GetMapping("currency-exchange-service/foreign-exchange/from/{from}/to/{to}")
     public CurrencyConversionBean retrieveExchangeValue(@PathVariable String from, @PathVariable String to);
-
-
     }
