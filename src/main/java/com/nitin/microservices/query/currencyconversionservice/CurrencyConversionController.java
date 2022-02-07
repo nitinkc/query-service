@@ -1,4 +1,4 @@
-package com.nitin.microservices.learning.currencyConversionService.currencyconversionservice;
+package com.nitin.microservices.query.currencyconversionservice;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +61,12 @@ public class CurrencyConversionController {
         String msg = "Use this URL :: " + "\n"+
                 "http://localhost:8100/currency-converter/from/USD/to/INR/quantity/1";
 
+        return msg;
+    }
+
+    @GetMapping("/")
+    public String welcomeMessage(){
+        String msg = "Hello Command";
         return msg;
     }
 }
