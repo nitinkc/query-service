@@ -1,4 +1,4 @@
-package com.nitin.microservices.learning.currencyConversionService.currencyconversionservice;
+package com.nitin.microservices.query.currencyconversionservice;
 
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.openfeign.FeignClient;
