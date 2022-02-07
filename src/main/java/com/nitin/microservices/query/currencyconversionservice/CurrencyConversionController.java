@@ -66,7 +66,7 @@ public class CurrencyConversionController {
 
     @GetMapping("/")
     public String welcomeMessage(){
-        String msg = "Hello Command";
+        String msg = "Hello Query";
         return msg;
     }
 }
