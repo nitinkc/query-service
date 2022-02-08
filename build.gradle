@@ -32,6 +32,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-hystrix
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: '2.2.10.RELEASE'
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.4.0'
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '2.4.0'
 }
 
 dependencyManagement {
