@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.4.12'
+    id 'org.springframework.boot' version '3.0.1'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
 }
@@ -7,14 +7,13 @@ plugins {
 group = 'com.nitin.microservices.learning.currencyConversionService'
 version = '0.0.1-SNAPSHOT'
 description = 'query-service'
-sourceCompatibility = '11'
 
 repositories {
     mavenCentral()
 }
 
 ext {
-    set('springCloudVersion', "2020.0.4")
+    set('springCloudVersion', "2022.0.3")
 }
 
 dependencies {
@@ -27,7 +26,8 @@ dependencies {
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:2.2.1.RELEASE'
-    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-sleuth
+    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth:3.1.9'
     implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-eureka-client', version: '3.1.0'
 
     // https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-netflix-hystrix
