@@ -1,6 +1,5 @@
 package com.nitin.microservices.query.application;
 
-import brave.sampler.Sampler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchDataAutoConfiguration;
@@ -32,8 +31,8 @@ public class CurrencyConversionServiceApplication {
 		SpringApplication.run(CurrencyConversionServiceApplication.class, args);
 	}
 
-	@Bean
-	public Sampler defaultSampler(){
-		return Sampler.ALWAYS_SAMPLE;
-	}
+//	@Bean
+//	public Sampler defaultSampler(){
+//		return Sampler.ALWAYS_SAMPLE;
+//	}
 }

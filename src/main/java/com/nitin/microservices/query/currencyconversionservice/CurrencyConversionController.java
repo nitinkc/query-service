@@ -3,10 +3,11 @@ package com.nitin.microservices.query.currencyconversionservice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
@@ -23,36 +24,35 @@ public class CurrencyConversionController {
     @Autowired
     private CurrencyExchangeServiceProxy proxy;
 
-    @GetMapping("/currency-converter/from/{from}/to/{to}/quantity/{quantity}")
-    public CurrencyConversionBean convertCurrency(@PathVariable String from,
-                                                  @PathVariable String to,
-                                                  @PathVariable BigDecimal quantity){
-
-        Map<String,String> uriVariables = new HashMap<>();
-        uriVariables.put("from",from);
-        uriVariables.put("to",to);
+    @PostMapping("/currency-converter")
+    public ResponseEntity<ConvertedDto> convertCurrency(@RequestBody Map<String, Object> body){
+        String url = "http://localhost:8000/foreign-exchange";
+        HttpEntity<Map<String,Object>> httpEntity = new HttpEntity(body);
+        Integer quantity = (Integer) body.get("quantity");
 
         //Calling the Foreign Exchange Microservice from port 8000
-        ResponseEntity<CurrencyConversionBean> responseEntity = new RestTemplate().getForEntity("http://localhost:8000/foreign-exchange/from/{from}/to/{to}",
-                CurrencyConversionBean.class, uriVariables);
+        ResponseEntity<CurrencyConversionBean> responseEntity =
+                new RestTemplate()
+                        .exchange(url, HttpMethod.POST, httpEntity, CurrencyConversionBean.class);
 
         CurrencyConversionBean response = responseEntity.getBody();
         logger.info("{}",response);
 
-        return new CurrencyConversionBean(response.getId(),from,to, response.getConversionMultiple(),
-                quantity,quantity.multiply(response.getConversionMultiple()),response.getPort());
+        ConvertedDto convertedDto = ConvertedDto.builder()
+                .currencyConversionBean(response)
+                .quantity(BigDecimal.valueOf(quantity))
+                .totalCalculatedAmount(response.getConversionMultiple().multiply(BigDecimal.valueOf(quantity)))
+                .build();
 
+        return ResponseEntity.ok(convertedDto);
     }
 
-    @GetMapping("/currency-converter-feign/from/{from}/to/{to}/quantity/{quantity}")
-    public CurrencyConversionBean convertCurrencyFeign(@PathVariable String from,
-                                                  @PathVariable String to,
-                                                  @PathVariable BigDecimal quantity){
+    @PostMapping("/currency-converter-feign")
+    public CurrencyConversionBean convertCurrencyFeign(@RequestBody Map<String, Object> body){
 
-        CurrencyConversionBean response = proxy.retrieveExchangeValue(from, to);
+        CurrencyConversionBean response = proxy.retrieveExchangeValue(body);
         logger.info("{}",response);
-        return new CurrencyConversionBean(response.getId(),from,to, response.getConversionMultiple(),
-                quantity,quantity.multiply(response.getConversionMultiple()),response.getPort());
+        return response;
 
     }
 
@@ -66,7 +66,8 @@ public class CurrencyConversionController {
 
     @GetMapping("/")
     public String welcomeMessage(){
-        String msg = "Hello Query";
+        String msg = "Use this URL :: " + "\n"+
+                "http://localhost:8100/currency-converter/from/USD/to/INR/quantity/1";
         return msg;
     }
 }
